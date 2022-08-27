@@ -10,6 +10,7 @@
     "MixinEnchantmentHelper",
     "MixinEntityPlayerMP",
     "MixinEntity",
+    "MixinEntityLivingBase",
     "MixinInventoryPlayer",
     "MixinMinecraftServer",
     "MixinBlockStateContainer",
@@ -21,7 +22,9 @@
     "client.MixinEntityPlayerSP",
     "client.MixinIntegratedServer",
     "client.MixinEntityRenderer",
-    "client.MixinThreadDownloadImageData"
+    "client.MixinThreadDownloadImageData",
+    "client.MixinRenderManager",
+    "client.MixinTileEntityRendererDispatcher"
   ],
   "injectors": {
     "maxShiftBy": 10

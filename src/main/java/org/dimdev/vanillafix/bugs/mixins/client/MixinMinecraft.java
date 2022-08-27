@@ -5,11 +5,14 @@ import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.shader.Framebuffer;
+import net.minecraft.entity.Entity;
 import net.minecraft.profiler.ISnooperInfo;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.util.ScreenShotHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -35,6 +38,8 @@ public abstract class MixinMinecraft implements IThreadListener, ISnooperInfo {
     @Shadow @Final public Profiler profiler;
 
     @Shadow public GuiIngame ingameGUI;
+    @Shadow public Entity pointedEntity;
+    @Shadow public RayTraceResult objectMouseOver;
 
     /** @reason Fix GUI logic being included as part of "root.tick.textures" (https://bugs.mojang.com/browse/MC-129556) */
     @Redirect(method = "runTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/profiler/Profiler;endStartSection(Ljava/lang/String;)V", ordinal = 0))
@@ -104,5 +109,12 @@ public abstract class MixinMinecraft implements IThreadListener, ISnooperInfo {
     @Inject(method = "loadWorld(Lnet/minecraft/client/multiplayer/WorldClient;Ljava/lang/String;)V", at = @At(value = "INVOKE", target = "Ljava/lang/System;gc()V"), cancellable = true)
     private void onSystemGC(WorldClient worldClient, String reason, CallbackInfo ci) {
         ci.cancel();
+    }
+
+    /** @reason Release the reference to the entity so that the gc can do its works */
+    @Inject(method = "loadWorld(Lnet/minecraft/client/multiplayer/WorldClient;Ljava/lang/String;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/EntityRenderer;resetData()V"))
+    private void onResetEntityRenderer(WorldClient worldClient, String reason, CallbackInfo ci) {
+        pointedEntity = null;
+        objectMouseOver = null;
     }
 }

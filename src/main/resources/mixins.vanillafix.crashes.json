@@ -8,13 +8,13 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "MixinCrashReport",
-    "MixinIntegratedServer",
     "MixinUtil",
     "MixinCrashReportCategory",
     "MixinEntity",
     "MixinTileEntity"
   ],
   "client": [
+    "client.MixinIntegratedServer",
     "client.MixinMinecraft",
     "client.MixinBufferBuilder",
     "client.MixinTileEntityRenderDispatcher"

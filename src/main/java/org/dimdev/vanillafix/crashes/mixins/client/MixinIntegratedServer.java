@@ -1,4 +1,4 @@
-package org.dimdev.vanillafix.crashes.mixins;
+package org.dimdev.vanillafix.crashes.mixins.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.crash.CrashReport;
